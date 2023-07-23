@@ -18,12 +18,9 @@ CPPFLAGS += `pkg-config --cflags protobuf grpc`
 GRPC_CPP_PLUGIN = grpc_cpp_plugin
 GRPC_CPP_PLUGIN_PATH ?= `which $(GRPC_CPP_PLUGIN)`
 
-all: client server
+all: client server main
 
-client: myServer.pb.o myServer.grpc.pb.o client.o
-	$(CXX) $^ $(LDFLAGS) -o $@
-
-server: myServer.pb.o myServer.grpc.pb.o server.o
+main: protos/myServer.pb.o protos/myServer.grpc.pb.o main.o
 	$(CXX) $^ $(LDFLAGS) -o $@
 
 %.grpc.pb.cc: %.proto
@@ -33,4 +30,4 @@ server: myServer.pb.o myServer.grpc.pb.o server.o
 	protoc --cpp_out=. $<
 
 clean:
-	rm -f *.o *.pb.cc *.pb.h client server
+	rm -f *.o *.pb.cc *.pb.h client server main
